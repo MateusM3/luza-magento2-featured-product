@@ -7,7 +7,15 @@
                 class="Luza\FeaturedProduct\Block\FeaturedProduct"
                 name="luza.featured.product"
                 template="Luza_FeaturedProduct::featured_product.phtml"
-                before="-"/>
+                before="-">
+                <arguments>
+                    <argument
+                        name="view_model"
+                        xsi:type="object">
+                        Luza\FeaturedProduct\ViewModel\FeaturedProductData
+                    </argument>
+                </arguments>
+            </block>
         </referenceContainer>
     </body>
 </page>
