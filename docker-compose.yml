@@ -1,0 +1,139 @@
+services:
+  #PHP Container
+  app:
+    build:
+      context: ./.docker/php
+      dockerfile: Dockerfile
+    image: luza-assessment-app:8.2
+    container_name: luza-assessment-app
+    tty: true
+    user: "devilbox:devilbox"
+    working_dir: /app
+    volumes:
+      - ./:/app
+      - ./.docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    depends_on:
+      - database
+    networks:
+      - app-network
+
+  webserver:
+    image: webdevops/apache:alpine
+    container_name: luza-assessment-webserver
+    environment:
+      WEB_DOCUMENT_ROOT: /app/pub
+      WEB_PHP_SOCKET: app:9000
+    ports:
+      - "8080:80"
+    volumes:
+      - ./:/app
+    depends_on:
+      - app
+    networks:
+      - app-network
+
+  #MariaDB Container
+  database:
+    image: mariadb:10.3-bionic
+    container_name: luza-assessment-database
+    tty: true
+    environment:
+      MYSQL_DATABASE: luza_magento_assessment
+      MYSQL_ROOT_PASSWORD: secret
+    working_dir: /media
+    volumes:
+      - dbdata:/var/lib/mysql/
+      - ./.docker/mysql/sqls:/media
+    networks:
+      - app-network
+
+  #PhpMyAdmin Container
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: luza-assessment-phpmyadmin
+    environment:
+      PMA_HOST: luza-assessment-database
+      PMA_USER: root
+      PMA_PASSWORD: secret
+      MEMORY_LIMIT: 1024M
+      UPLOAD_LIMIT: 1024M
+    ports:
+      - "8302:80"
+    depends_on:
+      - database
+    networks:
+      - app-network
+
+  #Node Container
+  node:
+    image: mateusmonteiro/gulp-sass:1.0.0
+    container_name: luza-assessment-node
+    tty: true
+    user: "node:node"
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+    networks:
+      - app-network
+
+  redis:
+    image: redis
+    container_name: luza-assessment-redis
+    ports:
+     - 6379
+    networks:
+      - app-network
+
+  redis-session:
+    image: redis
+    container_name: luza-assessment-redis-session
+    ports:
+     - 6379
+    networks:
+      - app-network
+
+  mailhog:
+    image: mailhog/mailhog
+    container_name: luza-assessment-mailhog
+    ports:
+      - 1025:1025
+      - 8025:8025
+    networks:
+      - app-network  
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.9.3
+    container_name: luza-assessment-elasticsearch
+    user: "elasticsearch:elasticsearch"
+    environment:
+      - xpack.security.enabled=false
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - bootstrap.memory_lock=true
+      - cluster.name=es-docker-cluster
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    cap_add:
+      - IPC_LOCK
+    volumes:
+      - ./.docker/elasticsearchdata:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+      - 9300:9300
+    networks:
+      - app-network
+
+#Docker Networks
+networks:
+  app-network:
+    driver: bridge
+
+#Volumes
+volumes:
+  dbdata:
+    driver: local
