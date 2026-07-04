@@ -51,6 +51,7 @@
                        showInWebsite="1"
                        showInStore="1">
                     <label>Product SKU</label>
+                    <backend_model>Luza\FeaturedProduct\Model\Config\Backend\ProductSku</backend_model>
                     <comment>
                         Enter the SKU of the product to display on the homepage.
                     </comment>
