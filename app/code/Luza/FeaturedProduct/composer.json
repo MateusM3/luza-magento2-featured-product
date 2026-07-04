@@ -1,0 +1,17 @@
+{
+    "name": "luza/module-featured-product",
+    "description": "Magento 2 module for displaying a featured product with real-time inventory updates.",
+    "type": "magento2-module",
+    "license": [
+        "proprietary"
+    ],
+    "version": "1.0.0",
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Luza\\FeaturedProduct\\": ""
+        }
+    }
+}
