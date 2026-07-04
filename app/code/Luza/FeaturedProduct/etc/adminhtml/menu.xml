@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add
+            id="Luza_FeaturedProduct::featured_product"
+            title="Featured Product"
+            module="Luza_FeaturedProduct"
+            sortOrder="90"
+            parent="Magento_Backend::content"
+            action="adminhtml/system_config/edit/section/luza_featured_product"
+            resource="Luza_FeaturedProduct::config"/>
+    </menu>
+</config>
