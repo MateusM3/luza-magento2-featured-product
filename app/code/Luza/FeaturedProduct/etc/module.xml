@@ -4,6 +4,7 @@
     <module name="Luza_FeaturedProduct">
         <sequence>
             <module name="Magento_Catalog"/>
+            <module name="Magento_InventorySalesApi"/>
             <module name="Magento_Cms"/>
         </sequence>
     </module>

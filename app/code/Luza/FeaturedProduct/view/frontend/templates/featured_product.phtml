@@ -2,17 +2,32 @@
 
 /** @var \Magento\Framework\View\Element\Template $block */
 /** @var \Luza\FeaturedProduct\ViewModel\FeaturedProductData $viewModel */
+/** @var \Magento\Framework\Escaper $escaper */
 $viewModel = $block->getData('view_model');
+
+if (!$viewModel->hasProduct()) {
+    return;
+}
 ?>
 
-<div class="luza-featured-product">
+<div class="luza-featured-product"
+     data-product-id="<?= (int) $viewModel->getProductId() ?>">
+    <?php $imageUrl = $viewModel->getImageUrl(); ?>
+    <?php if ($imageUrl !== ''): ?>
+        <img class="luza-featured-product__image"
+             src="<?= $escaper->escapeUrl($imageUrl) ?>"
+             alt="<?= $escaper->escapeHtmlAttr($viewModel->getName()) ?>"
+             loading="lazy"/>
+    <?php endif; ?>
     <h2><?= $escaper->escapeHtml($viewModel->getName()) ?></h2>
     <p>
         <?= $escaper->escapeHtml(__('Price')) ?>:
-        <?= $escaper->escapeHtml($viewModel->getPrice()) ?>
+        <?= /* @noEscape */ $viewModel->getPrice() ?>
     </p>
     <p>
         <?= $escaper->escapeHtml(__('Available Stock')) ?>:
-        <?= $escaper->escapeHtml($viewModel->getStock()) ?>
+        <span class="luza-featured-product__stock">
+            <?= $escaper->escapeHtml((string) $viewModel->getStock()) ?>
+        </span>
     </p>
 </div>
