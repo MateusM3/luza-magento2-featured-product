@@ -15,6 +15,7 @@ $name = $viewModel->getName();
 <a class="luza-featured-product"
    href="<?= $escaper->escapeUrl($viewModel->getProductUrl()) ?>"
    data-product-id="<?= (int) $viewModel->getProductId() ?>"
+   data-role="featured-product"
    aria-label="<?= $escaper->escapeHtmlAttr(__('Featured product: %1', $name)) ?>">
     <span class="luza-featured-product__figure">
         <span class="luza-featured-product__badge"><?= $escaper->escapeHtml(__('Featured')) ?></span>
@@ -31,11 +32,8 @@ $name = $viewModel->getName();
 
         <span class="luza-featured-product__price"><?= $viewModel->getPrice() ?></span>
 
-        <span class="luza-featured-product__stock">
-            <span class="luza-featured-product__stock-label"><?= $escaper->escapeHtml(__('Available stock')) ?>:</span>
-            <span class="luza-featured-product__stock-value"
-                  data-role="featured-product-stock"><?= $escaper->escapeHtml((string) $viewModel->getStock()) ?></span>
-            <span class="luza-featured-product__stock-unit"><?= $escaper->escapeHtml(__('un.')) ?></span>
+        <span class="luza-featured-product__stock" data-bind="scope: 'featuredProductStock'">
+            <!-- ko template: getTemplate() --><!-- /ko -->
         </span>
 
         <span class="luza-featured-product__cta">
@@ -44,3 +42,10 @@ $name = $viewModel->getName();
         </span>
     </span>
 </a>
+<script type="text/x-magento-init">
+    {
+        "[data-role=featured-product]": {
+            "Magento_Ui/js/core/app": <?= /* @noEscape */ $block->getJsLayout() ?>
+        }
+    }
+</script>

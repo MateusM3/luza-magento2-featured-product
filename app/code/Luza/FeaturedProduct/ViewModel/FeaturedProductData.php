@@ -6,12 +6,14 @@ namespace Luza\FeaturedProduct\ViewModel;
 
 use Luza\FeaturedProduct\Api\FeaturedProductResolverInterface;
 use Luza\FeaturedProduct\Api\FeaturedProductStockInterface;
+use Luza\FeaturedProduct\Model\Config;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Image\UrlBuilder as ImageUrlBuilder;
 use Magento\Catalog\Pricing\Price\FinalPrice;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Pricing\SaleableInterface;
+use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 
 class FeaturedProductData implements ArgumentInterface
@@ -24,7 +26,9 @@ class FeaturedProductData implements ArgumentInterface
         private readonly FeaturedProductResolverInterface $resolver,
         private readonly FeaturedProductStockInterface $stock,
         private readonly PriceCurrencyInterface $priceCurrency,
-        private readonly ImageUrlBuilder $imageUrlBuilder
+        private readonly ImageUrlBuilder $imageUrlBuilder,
+        private readonly Config $config,
+        private readonly UrlInterface $urlBuilder
     ) {
     }
 
@@ -103,5 +107,20 @@ class FeaturedProductData implements ArgumentInterface
         }
 
         return $this->stock->getSalableQty((string) $product->getSku());
+    }
+
+    /**
+     * Config consumed by the Knockout stock component (merged into jsLayout by the Block).
+     *
+     * @return array{qty: float, updateUrl: string, interval: int, enabled: bool}
+     */
+    public function getStockComponentConfig(): array
+    {
+        return [
+            'qty' => $this->getStock(),
+            'updateUrl' => $this->urlBuilder->getUrl('featuredproduct/stock'),
+            'interval' => $this->config->getStockUpdateInterval() * 1000,
+            'enabled' => $this->config->isRealtimeStockEnabled(),
+        ];
     }
 }

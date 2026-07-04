@@ -17,6 +17,12 @@ class Config
 
     private const XML_PATH_PRODUCT_ID = 'luza_featured_product/general/product_id';
 
+    private const XML_PATH_REALTIME_ENABLED = 'luza_featured_product/realtime_stock/enabled';
+
+    private const XML_PATH_REALTIME_INTERVAL = 'luza_featured_product/realtime_stock/update_interval';
+
+    private const DEFAULT_INTERVAL_SECONDS = 15;
+
     public function __construct(
         private readonly ScopeConfigInterface $scopeConfig
     ) {
@@ -58,5 +64,28 @@ class Config
         );
 
         return $value ? (int) $value : null;
+    }
+
+    public function isRealtimeStockEnabled(?int $storeId = null): bool
+    {
+        return $this->scopeConfig->isSetFlag(
+            self::XML_PATH_REALTIME_ENABLED,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
+    }
+
+    /**
+     * Stock refresh interval in seconds (falls back to a safe default when unset/invalid).
+     */
+    public function getStockUpdateInterval(?int $storeId = null): int
+    {
+        $interval = (int) $this->scopeConfig->getValue(
+            self::XML_PATH_REALTIME_INTERVAL,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
+
+        return $interval > 0 ? $interval : self::DEFAULT_INTERVAL_SECONDS;
     }
 }

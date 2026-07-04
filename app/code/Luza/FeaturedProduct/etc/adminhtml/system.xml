@@ -75,6 +75,39 @@
                     </depends>
                 </field>
             </group>
+            <group id="realtime_stock"
+                   translate="label"
+                   sortOrder="20"
+                   showInDefault="1"
+                   showInWebsite="1"
+                   showInStore="1">
+                <label>Real-Time Stock</label>
+                <field id="enabled"
+                       translate="label"
+                       type="select"
+                       sortOrder="10"
+                       showInDefault="1"
+                       showInWebsite="1"
+                       showInStore="1">
+                    <label>Enable Real-Time Update</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Periodically refreshes the available stock without reloading the page.</comment>
+                </field>
+                <field id="update_interval"
+                       translate="label"
+                       type="text"
+                       sortOrder="20"
+                       showInDefault="1"
+                       showInWebsite="1"
+                       showInStore="1">
+                    <label>Update Interval (seconds)</label>
+                    <validate>validate-digits validate-greater-than-zero</validate>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                    <comment>How often the stock is refreshed. Minimum recommended: 5 seconds.</comment>
+                </field>
+            </group>
         </section>
     </system>
 </config>
