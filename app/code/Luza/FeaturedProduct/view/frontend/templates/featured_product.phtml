@@ -8,26 +8,39 @@ $viewModel = $block->getData('view_model');
 if (!$viewModel->hasProduct()) {
     return;
 }
-?>
 
-<div class="luza-featured-product"
-     data-product-id="<?= (int) $viewModel->getProductId() ?>">
-    <?php $imageUrl = $viewModel->getImageUrl(); ?>
-    <?php if ($imageUrl !== ''): ?>
-        <img class="luza-featured-product__image"
-             src="<?= $escaper->escapeUrl($imageUrl) ?>"
-             alt="<?= $escaper->escapeHtmlAttr($viewModel->getName()) ?>"
-             loading="lazy"/>
-    <?php endif; ?>
-    <h2><?= $escaper->escapeHtml($viewModel->getName()) ?></h2>
-    <p>
-        <?= $escaper->escapeHtml(__('Price')) ?>:
-        <?= /* @noEscape */ $viewModel->getPrice() ?>
-    </p>
-    <p>
-        <?= $escaper->escapeHtml(__('Available Stock')) ?>:
+$imageUrl = $viewModel->getImageUrl();
+$name = $viewModel->getName();
+?>
+<a class="luza-featured-product"
+   href="<?= $escaper->escapeUrl($viewModel->getProductUrl()) ?>"
+   data-product-id="<?= (int) $viewModel->getProductId() ?>"
+   aria-label="<?= $escaper->escapeHtmlAttr(__('Featured product: %1', $name)) ?>">
+    <span class="luza-featured-product__figure">
+        <span class="luza-featured-product__badge"><?= $escaper->escapeHtml(__('Featured')) ?></span>
+        <?php if ($imageUrl !== ''): ?>
+            <img class="luza-featured-product__image"
+                 src="<?= $escaper->escapeUrl($imageUrl) ?>"
+                 alt="<?= $escaper->escapeHtmlAttr($name) ?>"
+                 loading="lazy"/>
+        <?php endif; ?>
+    </span>
+
+    <span class="luza-featured-product__body">
+        <span class="luza-featured-product__title"><?= $escaper->escapeHtml($name) ?></span>
+
+        <span class="luza-featured-product__price"><?= $viewModel->getPrice() ?></span>
+
         <span class="luza-featured-product__stock">
-            <?= $escaper->escapeHtml((string) $viewModel->getStock()) ?>
+            <span class="luza-featured-product__stock-label"><?= $escaper->escapeHtml(__('Available stock')) ?>:</span>
+            <span class="luza-featured-product__stock-value"
+                  data-role="featured-product-stock"><?= $escaper->escapeHtml((string) $viewModel->getStock()) ?></span>
+            <span class="luza-featured-product__stock-unit"><?= $escaper->escapeHtml(__('un.')) ?></span>
         </span>
-    </p>
-</div>
+
+        <span class="luza-featured-product__cta">
+            <?= $escaper->escapeHtml(__('View product')) ?>
+            <span class="luza-featured-product__cta-arrow" aria-hidden="true">&rarr;</span>
+        </span>
+    </span>
+</a>

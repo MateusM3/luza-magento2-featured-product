@@ -66,9 +66,16 @@ class FeaturedProductData implements ArgumentInterface
         }
 
         return $this->imageUrlBuilder->getUrl(
-            (string) $product->getData('thumbnail'),
-            'product_thumbnail_image'
+            (string) $product->getData('image'),
+            'product_base_image'
         );
+    }
+
+    public function getProductUrl(): string
+    {
+        $product = $this->getProduct();
+
+        return $product instanceof Product ? $product->getProductUrl() : '';
     }
 
     public function getPrice(): string

@@ -1,0 +1,195 @@
+//
+//  Luza Featured Product
+//  _____________________________________________
+
+//
+//  Variables
+//  ---------------------------------------------
+
+@luza-fp__radius: 16px;
+@luza-fp__color-accent: #16223c;
+@luza-fp__color-muted: #8a94a6;
+@luza-fp__color-stock: #2ecd8a;
+@luza-fp__color-border: #e6e9ef;
+@luza-fp__figure-basis: 42%;
+
+//
+//  Common
+//  ---------------------------------------------
+
+& when (@media-common = true) {
+
+    .luza-featured-product {
+        display: flex;
+        align-items: stretch;
+        width: 100%;
+        margin: 0 0 @indent__xl;
+        border: 1px solid @luza-fp__color-border;
+        border-radius: @luza-fp__radius;
+        background-color: @color-white;
+        box-shadow: 0 10px 30px rgba(22, 34, 60, 0.06);
+        color: @luza-fp__color-accent;
+        text-decoration: none;
+        overflow: hidden;
+        transition: box-shadow 0.25s ease, transform 0.25s ease;
+
+        &:visited {
+            color: @luza-fp__color-accent;
+        }
+
+        &:hover,
+        &:focus {
+            text-decoration: none;
+            box-shadow: 0 16px 40px rgba(22, 34, 60, 0.12);
+            transform: translateY(-2px);
+        }
+
+        //  Keyboard focus ring (hidden on mouse click)
+        &:focus-visible {
+            outline: 2px solid @luza-fp__color-accent;
+            outline-offset: 3px;
+        }
+
+        //
+        //  Figure (left panel)
+        //
+
+        &__figure {
+            position: relative;
+            display: flex;
+            flex: 0 0 @luza-fp__figure-basis;
+            align-items: center;
+            justify-content: center;
+            padding: @indent__xl;
+            background: linear-gradient(135deg, #f7f9fb 0%, #eaeef3 100%);
+        }
+
+        &__image {
+            width: 100%;
+            max-width: 320px;
+            height: auto;
+            object-fit: contain;
+            mix-blend-mode: multiply;
+        }
+
+        &__badge {
+            position: absolute;
+            top: @indent__l;
+            left: @indent__l;
+            padding: 6px 14px;
+            border-radius: 20px;
+            background-color: @luza-fp__color-accent;
+            color: @color-white;
+            font-size: 1.1rem;
+            font-weight: @font-weight__bold;
+            letter-spacing: 0.08em;
+            line-height: 1;
+            text-transform: uppercase;
+        }
+
+        //
+        //  Body (right column)
+        //
+
+        &__body {
+            display: flex;
+            flex: 1 1 auto;
+            flex-direction: column;
+            justify-content: center;
+            gap: @indent__base;
+            padding: @indent__xl (@indent__xl + 10px);
+            min-width: 0;
+        }
+
+        &__title {
+            margin: 0;
+            color: @luza-fp__color-accent;
+            font-size: 3rem;
+            font-weight: @font-weight__bold;
+            line-height: 1.15;
+        }
+
+        &__price {
+            margin: 0;
+            color: @luza-fp__color-accent;
+            font-size: 4rem;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        &__stock {
+            display: inline-flex;
+            align-items: center;
+            gap: @indent__xs;
+            font-size: @font-size__base;
+            color: @luza-fp__color-muted;
+
+            &::before {
+                content: '';
+                width: 9px;
+                height: 9px;
+                margin-right: 4px;
+                border-radius: 50%;
+                background-color: @luza-fp__color-stock;
+                box-shadow: 0 0 0 4px fade(@luza-fp__color-stock, 18%);
+            }
+        }
+
+        &__stock-value,
+        &__stock-unit {
+            color: @luza-fp__color-accent;
+            font-weight: @font-weight__bold;
+        }
+
+        &__stock-value {
+            transition: color 0.2s ease;
+        }
+
+        &__cta {
+            display: inline-flex;
+            align-items: center;
+            gap: @indent__xs;
+            margin-top: @indent__s;
+            color: @luza-fp__color-accent;
+            font-size: 1.6rem;
+            font-weight: @font-weight__bold;
+        }
+
+        &__cta-arrow {
+            transition: transform 0.2s ease;
+        }
+
+        &:hover &__cta-arrow {
+            transform: translateX(4px);
+        }
+    }
+}
+
+//
+//  Mobile (max @screen__m)
+//  ---------------------------------------------
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+
+    .luza-featured-product {
+        flex-direction: column;
+
+        &__figure {
+            flex-basis: auto;
+            padding: @indent__l;
+        }
+
+        &__body {
+            padding: @indent__l;
+            gap: @indent__s;
+        }
+
+        &__title {
+            font-size: 2.4rem;
+        }
+
+        &__price {
+            font-size: 3.2rem;
+        }
+    }
+}
